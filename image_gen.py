@@ -12,15 +12,9 @@ img_size = (img_width, img_height)
 rnd_min_size = 50
 rnd_max_size = 80
 
-GRAY = (204, 204, 204, 255)
-BLUE = (44, 117, 255, 255)
-BLUE1 = (97, 152, 255, 255)
-OUTLINE = (0, 87, 255, 255)
-
-
-def get_rnd_colr():
-    c = lambda: random.randint(0, 255)
-    return c(), c(), c(), 255
+COLOR1 = (44, 117, 255, 255)
+COLOR2 = (97, 152, 255, 255)
+COLOR3 = (0, 87, 255, 255)
 
 
 def sinx(value):
@@ -39,9 +33,7 @@ def cos3x(value):
     return cos(3 * value / 4)
 
 
-def test2():
-    # m_color = get_rnd_colr()
-
+def test():
 
     grc = lambda: random.randint(0, 255)
     c1, c2, c3 = grc(), grc(), grc()
@@ -114,28 +106,6 @@ def test2():
     return new_image
 
 
-def test():
-    new_image = Image.new("RGBA", img_size, (0, 0, 0, 0))
-
-    """Fill image with white color """
-    draw = ImageDraw.Draw(new_image)
-    draw.rectangle((0, 0) + new_image.size, fill="white")
-    del draw
-
-    """Black cross over an new_image"""
-    draw = ImageDraw.Draw(new_image)
-    draw.line((0, 0) + new_image.size, fill="black", width=4)
-    draw.line((0, new_image.size[1], new_image.size[0], 0), fill="black", width=4)
-    del draw
-
-    """Red circle"""
-    draw = ImageDraw.Draw(new_image)
-    draw.ellipse((28, 28, 100, 100), fill="red", outline="red")
-    del draw
-
-    return new_image
-
-
 def get_increment():
     f = open('increment')
     inc = f.read()
@@ -162,5 +132,5 @@ def save_image(image, file=None):
 
 
 if __name__ == '__main__':
-    save_image(test2())
+    save_image(test())
     # random_square()
