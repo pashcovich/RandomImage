@@ -1,5 +1,4 @@
 # coding: utf-8
-import os, sys
 import random
 from math import sin, cos
 
@@ -33,27 +32,28 @@ def cos3x(value):
     return cos(3 * value / 4)
 
 
-def test():
-
+def gen_rnd_colors():
     grc = lambda: random.randint(0, 255)
-    c1, c2, c3 = grc(), grc(), grc()
-    color1 = (c1 + 50, c2 + 50, c3 + 0, 255)
-    color2 = (c1 + 0, c2 + 50, c3 + 50, 255)
-    color3 = (c1 + 50, c2 + 0, c3 + 50, 255)
+    t1, t2, t3 = grc(), grc(), grc()
+    c1 = (t1 + 50, t2 + 50, t3 + 0, 255)
+    c2 = (t1 + 0, t2 + 50, t3 + 50, 255)
+    c3 = (t1 + 50, t2 + 0, t3 + 50, 255)
 
-    new_image = Image.new("RGBA", img_size, color1)
+    return [c1, c2, c3]
 
+
+def gen_rnd_points():
     xy = []
 
     for x in range(0, img_width, int(0.6 * rnd_min_size)):
 
         for step in range(0, img_height, int(0.6 * rnd_min_size)):
-            rnd_xshift = random.randrange(-6, 6, 5)
-            rnd_yshift = random.randrange(-6, 6, 5)
+            rnd_x_shift = random.randrange(-6, 6, 5)
+            rnd_y_shift = random.randrange(-6, 6, 5)
 
             y = 0
-            x += rnd_xshift
-            for c in range(0, 4):
+            x += rnd_x_shift
+            for cnt in range(0, 4):
                 rnd = random.randint(0, 4)
 
                 if rnd == 0:
@@ -66,42 +66,54 @@ def test():
                     y += 2 * cos3x(x)
 
             y += step
-            y += rnd_yshift
+            y += rnd_y_shift
             xy.append((x, y))
+    list_xy = list(set(xy))
+    random.shuffle(list_xy)
+    random.SystemRandom().shuffle(list_xy)
+    return list_xy
 
-    sxy = list(set(xy))
-    random.shuffle(sxy)
-    random.SystemRandom().shuffle(sxy)
 
-    test_draw = ImageDraw.Draw(new_image)
+def gen_img(type=1):
+    # type = 1 for squares - by default
+    # type = 2  is for circles
 
-    for point in sxy:
+    colors = gen_rnd_colors()
+
+    new_image = Image.new("RGBA", img_size, colors[0])
+
+    figure_draw = ImageDraw.Draw(new_image)
+
+    for point in gen_rnd_points():
 
         x0 = point[0]
         y0 = point[1]
+
         square_size = random.randint(rnd_min_size, rnd_max_size)
+
         sc_n = 6
 
         for sc in range(sc_n, 1, -1):
-            print
+
             dx = int(square_size / 2 / (sc_n - 1) * sc)
             dy = int(square_size / 2 / (sc_n - 1) * sc)
-            # print("dx = " + str(dx))
-            # print("dy = " + str(dy))
 
             if sc == sc_n:
-                outline_color = color2
+                outline_color = colors[1]
             else:
                 outline_color = None
 
             if sc % 2 == 1:
-                blue_color = color1
+                blue_color = colors[0]
             else:
-                blue_color = color3
+                blue_color = colors[2]
 
-            test_draw.rectangle((x0 - dx, y0 - dy) + (x0 + dx, y0 + dy), fill=blue_color, outline=outline_color)
+            if type == 1:
+                figure_draw.rectangle((x0 - dx, y0 - dy) + (x0 + dx, y0 + dy), fill=blue_color, outline=outline_color)
+            elif type == 2:
+                figure_draw.ellipse((x0 - dx, y0 - dy) + (x0 + dx, y0 + dy), fill=blue_color, outline=outline_color)
 
-    del test_draw
+    del figure_draw
 
     return new_image
 
@@ -124,13 +136,12 @@ def save_image(image, file=None):
     if file is None:
         inc = get_increment()
         image_file_name = 'new_image' + str(inc) + '.png'
+        set_increment(str(int(inc) + 1))
     else:
         image_file_name = file
 
     image.save(image_file_name, "PNG")
-    set_increment(str(int(inc) + 1))
 
 
 if __name__ == '__main__':
-    save_image(test())
-    # random_square()
+    save_image(gen_img(2))
