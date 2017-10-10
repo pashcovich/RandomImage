@@ -1,4 +1,4 @@
-function getRandomFloat(min, max) {
+function getRandomFloat(min = 0, max = 1) {
   return Math.random() * (max - min) + min;
 }
 
@@ -25,9 +25,9 @@ function getRandomColors() {
         if(g > 200) {dg = -50; } else {dg = 50;}
         if(b > 200) {db = -50; } else {db = 50;}
 
-        c1 = "rgba(" + (r + dr) + ", " + (g + dg) + ", " + b + ",1)";
-        c2 = "rgba(" + (r + dr) + ", " + g + ", " + (b + db) + ",1)";
-        c3 = "rgba(" + r + ", " + (g + dg) + ", " + (b + db) + ",1)";
+        c1 = "rgba(" + (r + dr) + ", " + (g + dg) + ", " + b + ", " + getRandomFloat(0.8) + ")";
+        c2 = "rgba(" + (r + dr) + ", " + g + ", " + (b + db) + ", " + getRandomFloat(0.8) + ")";
+        c3 = "rgba(" + r + ", " + (g + dg) + ", " + (b + db) + ", " + getRandomFloat(0.8) + ")";
 
      console.log([c1,c2,c3])
         return [c1,c2,c3];
@@ -87,9 +87,9 @@ function genImage() {
     var sc_n = 6;
     var type = 1;
     var rnd_min_size = 50;
-    var rnd_max_size = 80;
+    var rnd_max_size = 90;
 
-    ctx.fillStyle = clrs[0];
+    ctx.fillStyle = clrs[1];
     ctx.fillRect(0, 0, img_w, img_h);
 
     var points = [];
@@ -126,9 +126,9 @@ function genImage() {
         var dy = square_size / 2 / (sc_n - 1) * sc;
 
         if (sc % 2 == 1) {
-          ctx.fillStyle = clrs[1];
-        } else {
           ctx.fillStyle = clrs[2];
+        } else {
+          ctx.fillStyle = clrs[1];
         }
         //console.log("x" + sc + " = " + (x0 - dx) + " | y" + sc + " = " + (y0 -dy) + " | width" + sc + " = " + dss);
         if (type = 1) {
