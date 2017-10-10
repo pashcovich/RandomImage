@@ -34,10 +34,12 @@ def cos3x(value):
 
 def gen_rnd_colors():
     grc = lambda: random.randint(0, 255)
-    t1, t2, t3 = grc(), grc(), grc()
-    c1 = (t1 + 50, t2 + 50, t3 + 0, 255)
-    c2 = (t1 + 0, t2 + 50, t3 + 50, 255)
-    c3 = (t1 + 50, t2 + 0, t3 + 50, 255)
+    r, g, b = grc(), grc(), grc()
+    c1 = (r + 50, g + 50, b + 0, 255)
+    c2 = (r + 0, g + 50, b + 50, 255)
+    c3 = (r + 50, g + 0, b + 50, 255)
+
+    print(c1, c2, c3)
 
     return [c1, c2, c3]
 
@@ -118,25 +120,36 @@ def gen_img(type=1):
     return new_image
 
 
-def get_increment():
-    f = open('increment')
-    inc = f.read()
-    f.close()
-    # print("Last increment = " + inc)
-    return inc
+def check_file(fn):
+    try:
+        open(fn, "r")
+        return True
+    except (IOError, OSError) as e:
+        print("Error: " + str(e))
+        return False
 
 
-def set_increment(value):
-    f = open('increment', 'w')
+def get_counter():
+    if check_file("counter"):
+        f = open('counter')
+        cnt = f.read()
+        f.close()
+        return cnt
+    # print("Last counter = " + inc)
+
+
+
+def set_counter(value):
+    f = open('counter', 'w')
     f.write(value)
     f.close()
 
 
 def save_image(image, file=None):
     if file is None:
-        inc = get_increment()
-        image_file_name = 'new_image' + str(inc) + '.png'
-        set_increment(str(int(inc) + 1))
+        cnt = get_counter()
+        image_file_name = 'new_image' + str(cnt) + '.png'
+        set_counter(str(int(cnt) + 1))
     else:
         image_file_name = file
 
