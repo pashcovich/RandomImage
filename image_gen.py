@@ -148,7 +148,7 @@ def set_counter(value):
 def save_image(image, file=None):
     if file is None:
         cnt = get_counter()
-        image_file_name = 'new_image' + str(cnt) + '.png'
+        image_file_name = 'new_image_' + str(cnt) + '.png'
         set_counter(str(int(cnt) + 1))
     else:
         image_file_name = file
