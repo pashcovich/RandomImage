@@ -235,7 +235,6 @@ def get_counter():
         cnt = f.read()
         f.close()
         return cnt
-        # print("Last counter = " + inc)
 
 
 def set_counter(value):
