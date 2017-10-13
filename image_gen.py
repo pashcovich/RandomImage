@@ -106,16 +106,116 @@ def gen_img(type=1):
                 outline_color = None
 
             if sc % 2 == 1:
-                blue_color = colors[0]
+                fill_color = colors[0]
             else:
-                blue_color = colors[2]
+                fill_color = colors[2]
 
             if type == 1:
-                figure_draw.rectangle((x0 - dx, y0 - dy) + (x0 + dx, y0 + dy), fill=blue_color, outline=outline_color)
+                figure_draw.rectangle((x0 - dx, y0 - dy) + (x0 + dx, y0 + dy), fill=fill_color, outline=outline_color)
             elif type == 2:
-                figure_draw.ellipse((x0 - dx, y0 - dy) + (x0 + dx, y0 + dy), fill=blue_color, outline=outline_color)
+                figure_draw.ellipse((x0 - dx, y0 - dy) + (x0 + dx, y0 + dy), fill=fill_color, outline=outline_color)
 
     del figure_draw
+
+    return new_image
+
+
+def gen_tree():
+    sky_color = "rgba(51, 153, 255, 255)"
+
+    ground_color = "rgba(51, 153, 255, 255)"
+
+    lv1 = "rgba(51, 102, 51, 255)"
+    lv2 = "rgba(0, 51, 0, 255)"
+    lv3 = "rgba(204, 255, 0, 255)"
+    lv4 = "rgba(204, 51, 0, 255)"
+    leaves = [lv1, lv2, lv3, lv4]
+
+    grass_color = "rgba(51, 51, 0, 255)"
+
+    fill_color = "rgba(102, 51, 0,255)"
+    outline_color = "black"
+
+    new_image = Image.new("RGBA", img_size, sky_color)
+    tree_draw = ImageDraw.Draw(new_image)
+
+    w = new_image.width
+    h = new_image.height
+
+    tree_points = list()
+
+    # левый нижний скос
+    tree_points.append(((random.randint(w / 2 - 60, w / 2 - 48)), h - random.randint(7, 17)))  # tp1
+    tree_points.append(((random.randint(w / 2 - 45, w / 2 - 38)), h - random.randint(40, 60)))  # tp2
+
+    # левая нижняя ветка
+    tree_points.append(((random.randint(w / 2 - 33, w / 2 - 28)), h / 2 + random.randint(40, 50)))  # tp3
+    tp4x, tp4y = (random.randint(w / 2 - 200, w / 2 - 150)), h / 3 + random.randint(0, 70)
+    tree_points.append((tp4x, tp4y))  # tp4
+    tree_points.append((tp4x + random.randint(3, 7), tp4y - random.randint(3, 7)))  # tp5
+    tree_points.append(((random.randint(w / 2 - 27, w / 2 - 25)), h / 2 + random.randint(19, 28)))  # tp6
+
+    # левая верхняя ветка
+    tree_points.append(((random.randint(w / 2 - 20, w / 2 - 17)), h / 2 - random.randint(30, 40)))  # tp7
+    tp8x, tp8y = (random.randint(w / 2 - 140, w / 2 - 90)), h / 3 - random.randint(23, 50)
+    tree_points.append((tp8x, tp8y))  # tp8
+    tree_points.append((tp8x + random.randint(3, 7), tp8y - random.randint(3, 7)))  # tp9
+    tree_points.append(((random.randint(w / 2 - 17, w / 2 - 14)), h / 2 - random.randint(52, 65) ))  # tp10
+
+    # верхняя точка ствола
+    tree_points.append(((random.randint(w / 2 - 14, w / 2 -9)), h / 4 - random.randint(30, 50)))  # tp7
+    tree_points.append(((random.randint(w / 2 + 10, w / 2 + 17)), h / 4 - random.randint(30, 50)))  # tp8
+
+    # праваяя верхняя ветка
+
+    # правая нижняя ветка
+    tree_points.append(((random.randint(w / 2 + 20, w / 2 + 25)), h / 2 - random.randint(20, 30)))  # tp9
+    tp10x, tp10y = (random.randint(w / 2 + 150, w / 2 + 200)), h / 3 + random.randint(-40, 50)
+    tree_points.append((tp10x, tp10y))  # tp10
+    tree_points.append((tp10x + random.randint(3, 7), tp10y + random.randint(3, 7)))  # tp11
+    tree_points.append(((random.randint(w / 2 + 28, w / 2 + 35)), h / 2 + random.randint(0, 10)))  # tp12
+
+    # правый нижний скос
+    tree_points.append(((random.randint(w / 2 + 38, w / 2 + 45)), h - random.randint(40, 60)))  # tp13
+    tree_points.append(((random.randint(w / 2 + 48, w / 2 + 60)), h - random.randint(7, 17)))  # tp4
+
+    #print(tree_points)
+
+    tree_draw.polygon(tree_points, fill=fill_color, outline=outline_color)
+    del tree_draw
+
+    leaves_draw = ImageDraw.Draw(new_image)
+    fill_color = leaves[2]
+    outline_color = leaves[1]
+
+    leaves_points = []
+
+    leaves_points.append((tree_points[3][0] - 15, tree_points[3][1] + 4))
+    leaves_points.append((tree_points[3][0] - 15, tree_points[3][1] - 16))
+    leaves_points.append((tree_points[3][0] - 4, tree_points[3][1] - 36))
+    leaves_points.append((tree_points[3][0] + 12,  tree_points[3][1] - 36))
+    leaves_points.append((tree_points[3][0] + 37, tree_points[3][1] + 6))
+
+    leaves_draw.polygon(leaves_points, fill=fill_color, outline=outline_color)
+
+    del leaves_draw
+
+    # сетка
+    grid = False
+    if grid:
+        grid_draw = ImageDraw.Draw(new_image)
+
+        grid_draw.line([(w / 2, 0), (w / 2, h)], fill="black")
+        grid_draw.line([(0, h / 2), (w, h / 2)], fill="black")
+
+        grid_draw.line([(w / 2 - 100, 0), (w / 2 - 100, h)], fill="black")
+        grid_draw.line([(w / 2 + 100, 0), (w / 2 + 100, h)], fill="black")
+
+        grid_draw.line([(0, h / 3), (w, h / 3)], fill="black")
+        grid_draw.line([(0, 2 * h / 3), (w, 2 * h / 3)], fill="black")
+
+        del grid_draw
+
 
     return new_image
 
@@ -135,8 +235,7 @@ def get_counter():
         cnt = f.read()
         f.close()
         return cnt
-    # print("Last counter = " + inc)
-
+        # print("Last counter = " + inc)
 
 
 def set_counter(value):
@@ -157,4 +256,5 @@ def save_image(image, file=None):
 
 
 if __name__ == '__main__':
-    save_image(gen_img(2))
+    # save_image(gen_img(1))
+    save_image(gen_tree())
