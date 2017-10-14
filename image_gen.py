@@ -184,21 +184,23 @@ def gen_tree():
     tree_draw.polygon(tree_points, fill=fill_color, outline=outline_color)
     del tree_draw
 
-    leaves_draw = ImageDraw.Draw(new_image)
-    fill_color = leaves[2]
-    outline_color = leaves[1]
+    draw_leaves = False
+    if draw_leaves:
+        leaves_draw = ImageDraw.Draw(new_image)
+        fill_color = leaves[2]
+        outline_color = leaves[1]
 
-    leaves_points = []
+        leaves_points = []
 
-    leaves_points.append((tree_points[3][0] - 15, tree_points[3][1] + 4))
-    leaves_points.append((tree_points[3][0] - 15, tree_points[3][1] - 16))
-    leaves_points.append((tree_points[3][0] - 4, tree_points[3][1] - 36))
-    leaves_points.append((tree_points[3][0] + 12,  tree_points[3][1] - 36))
-    leaves_points.append((tree_points[3][0] + 37, tree_points[3][1] + 6))
+        leaves_points.append((tree_points[3][0] - 15, tree_points[3][1] + 4))
+        leaves_points.append((tree_points[3][0] - 15, tree_points[3][1] - 16))
+        leaves_points.append((tree_points[3][0] - 4, tree_points[3][1] - 36))
+        leaves_points.append((tree_points[3][0] + 12, tree_points[3][1] - 36))
+        leaves_points.append((tree_points[3][0] + 37, tree_points[3][1] + 6))
 
-    leaves_draw.polygon(leaves_points, fill=fill_color, outline=outline_color)
+        leaves_draw.polygon(leaves_points, fill=fill_color, outline=outline_color)
 
-    del leaves_draw
+        del leaves_draw
 
     # сетка
     grid = False
@@ -255,5 +257,5 @@ def save_image(image, file=None):
 
 
 if __name__ == '__main__':
-    # save_image(gen_img(1))
-    save_image(gen_tree())
+    save_image(gen_img(2))
+    # save_image(gen_tree())

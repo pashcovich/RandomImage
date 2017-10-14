@@ -19,3 +19,9 @@ pip install -r requirements.txt
 $ python image_gen.py
 ```
 It will be generate a new image file  with size 640x480 (default) and filename like `new_image_1.png`  
+
+
+Some examples of generated  images:
+
+![squuares](example/example_squares.png)
+![circles](example/example_circles.png)
