@@ -21,7 +21,11 @@ $ python image_gen.py
 It will be generate a new image file  with size 640x480 (default) and filename like `new_image_1.png`  
 
 
+# Examples
 Some examples of generated  images:
-
+With squares:
 ![squuares](example/example_squares.png)
+With circles:
 ![circles](example/example_circles.png)
+
+Now I working on some more types
