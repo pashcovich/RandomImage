@@ -23,9 +23,11 @@ It will be generate a new image file  with size 640x480 (default) and filename l
 
 # Examples
 Some examples of generated  images:
+
 With squares:
 ![squuares](example/example_squares.png)
+
 With circles:
 ![circles](example/example_circles.png)
 
-Now I working on some more types
+Now I working on generator with some more features
