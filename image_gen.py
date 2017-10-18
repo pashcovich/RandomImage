@@ -2,7 +2,7 @@
 import random
 from math import sin, cos
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 
 img_width = 640
 img_height = 480
@@ -76,15 +76,25 @@ def gen_rnd_points():
     return list_xy
 
 
-def gen_img(type=1):
+def gen_img(typeof=None, nested=None):
     # type = 1 for squares - by default
     # type = 2  is for circles
+    if typeof is not None:
+        type = typeof
+    else:
+        type = random.randint(1, 2)
 
     colors = gen_rnd_colors()
-
-    new_image = Image.new("RGBA", img_size, colors[0])
+    if type == 3:
+        new_image = Image.new("RGBA", img_size, "rgba(102, 102, 102, 51)")
+    else:
+        new_image = Image.new("RGBA", img_size, colors[2])
 
     figure_draw = ImageDraw.Draw(new_image)
+    if nested is not None:
+        sc_n = nested
+    else:
+        sc_n = random.randint(2, 7)
 
     for point in gen_rnd_points():
 
@@ -92,8 +102,6 @@ def gen_img(type=1):
         y0 = point[1]
 
         square_size = random.randint(rnd_min_size, rnd_max_size)
-
-        sc_n = 6
 
         for sc in range(sc_n, 1, -1):
 
@@ -114,8 +122,49 @@ def gen_img(type=1):
                 figure_draw.rectangle((x0 - dx, y0 - dy) + (x0 + dx, y0 + dy), fill=fill_color, outline=outline_color)
             elif type == 2:
                 figure_draw.ellipse((x0 - dx, y0 - dy) + (x0 + dx, y0 + dy), fill=fill_color, outline=outline_color)
+            elif type == 3:
+                transparency = 255
+                colors = [(255, 0, 255, transparency), (0, 255, 255, transparency), (204, 51, 255, transparency),
+                          (204, 255, 0, transparency), (153, 51, 153, transparency), (255, 255, 51, transparency),
+                          (0, 102, 255, transparency), (102, 102, 0, transparency), (0, 153, 102, transparency)]
+                outline_color = None
+                fill_color = random.choice(colors)
+                figure_draw.ellipse((x0 - dx, y0 - dy) + (x0 + dx, y0 + dy), fill=fill_color, outline=outline_color)
+
+    #new_image = new_image.filter(ImageFilter.MinFilter)
 
     del figure_draw
+
+    return new_image
+
+
+def gen_bubbles():
+    new_image = Image.new("RGBA", img_size, "rgba(102, 102, 102, 153)")
+
+    # fill_color = "rgba(204, 255, 255, 204)"
+    # outline_color = "rgba(102, 153, 153, 225)"
+
+    bubbles_draw = ImageDraw.Draw(new_image)
+
+    # bubbles_draw.ellipse((100,100) + (200,200), fill=fill_color, outline=None)
+
+    colors = [(0, 0, 0, 0), (0, 204, 204, 51), (153, 0, 204, 51), (204, 255, 0, 51), (153, 0, 153, 51),
+              (0, 102, 255, 51), (102, 1204, 0, 51), (), (), ()]
+
+    x0 = 150
+    y0 = 150
+
+    for n in range(6, 1, -1):
+        dx = int(100 / 2 / (8 - 1) * n)
+        dy = int(100 / 2 / (8 - 1) * n)
+
+        outline_color = None
+
+        fill_color = colors[n - 1]
+
+        bubbles_draw.ellipse((x0 - dx, y0 - dy) + (x0 + dx, y0 + dy), fill=fill_color, outline=outline_color)
+
+    del bubbles_draw
 
     return new_image
 
@@ -149,21 +198,21 @@ def gen_tree():
     tree_points.append(((random.randint(w / 2 - 45, w / 2 - 38)), h - random.randint(40, 60)))  # tp2
 
     # левая нижняя ветка
-    tree_points.append(((random.randint(w / 2 - 33, w / 2 - 28)), h / 2 + random.randint(40, 50)))  # tp3
+    tree_points.append(((random.randint(w / 2 - 33, w / 2 - 28)), h / 2 + random.randint(40, 53)))  # tp3
     tp4x, tp4y = (random.randint(w / 2 - 200, w / 2 - 150)), h / 3 + random.randint(0, 70)
     tree_points.append((tp4x, tp4y))  # tp4
     tree_points.append((tp4x + random.randint(3, 7), tp4y - random.randint(3, 7)))  # tp5
-    tree_points.append(((random.randint(w / 2 - 27, w / 2 - 25)), h / 2 + random.randint(19, 28)))  # tp6
+    tree_points.append(((random.randint(w / 2 - 27, w / 2 - 25)), h / 2 + random.randint(12, 19)))  # tp6
 
     # левая верхняя ветка
-    tree_points.append(((random.randint(w / 2 - 20, w / 2 - 17)), h / 2 - random.randint(30, 40)))  # tp7
-    tp8x, tp8y = (random.randint(w / 2 - 140, w / 2 - 90)), h / 3 - random.randint(23, 50)
+    tree_points.append(((random.randint(w / 2 - 22, w / 2 - 19)), h / 2 - random.randint(25, 35)))  # tp7
+    tp8x, tp8y = (random.randint(w / 2 - 110, w / 2 - 70)), h / 3 - random.randint(23, 50)
     tree_points.append((tp8x, tp8y))  # tp8
     tree_points.append((tp8x + random.randint(3, 7), tp8y - random.randint(3, 7)))  # tp9
-    tree_points.append(((random.randint(w / 2 - 17, w / 2 - 14)), h / 2 - random.randint(52, 65) ))  # tp10
+    tree_points.append(((random.randint(w / 2 - 18, w / 2 - 15)), h / 2 - random.randint(53, 65)))  # tp10
 
     # верхняя точка ствола
-    tree_points.append(((random.randint(w / 2 - 14, w / 2 -9)), h / 4 - random.randint(30, 50)))  # tp7
+    tree_points.append(((random.randint(w / 2 - 14, w / 2 - 9)), h / 4 - random.randint(30, 50)))  # tp7
     tree_points.append(((random.randint(w / 2 + 10, w / 2 + 17)), h / 4 - random.randint(30, 50)))  # tp8
 
     # праваяя верхняя ветка
@@ -179,7 +228,7 @@ def gen_tree():
     tree_points.append(((random.randint(w / 2 + 38, w / 2 + 45)), h - random.randint(40, 60)))  # tp13
     tree_points.append(((random.randint(w / 2 + 48, w / 2 + 60)), h - random.randint(7, 17)))  # tp4
 
-    #print(tree_points)
+    # print(tree_points)
 
     tree_draw.polygon(tree_points, fill=fill_color, outline=outline_color)
     del tree_draw
@@ -217,7 +266,6 @@ def gen_tree():
         grid_draw.line([(0, 2 * h / 3), (w, 2 * h / 3)], fill="black")
 
         del grid_draw
-
 
     return new_image
 
@@ -257,5 +305,6 @@ def save_image(image, file=None):
 
 
 if __name__ == '__main__':
-    save_image(gen_img(2))
-    # save_image(gen_tree())
+    save_image(gen_img(3, 7), "rnd_test.png")
+    # save_image(gen_tree(),"tree_test.png")
+    # save_image(gen_bubbles(), "bubbles_test.png")
