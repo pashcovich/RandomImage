@@ -305,6 +305,6 @@ def save_image(image, file=None):
 
 
 if __name__ == '__main__':
-    save_image(gen_img(3, 7), "rnd_test.png")
+    save_image(gen_img(), "rnd_test.png")
     # save_image(gen_tree(),"tree_test.png")
     # save_image(gen_bubbles(), "bubbles_test.png")
